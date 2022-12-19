@@ -1,4 +1,8 @@
-#######FINAL DRAFT
+###WILL SIMONE
+##CPT 101 Final
+##Whats in the box guessing game
+
+
 
 import random
 import math
@@ -6,39 +10,46 @@ import math
 def main ():
     #Create constants and failsafe record variable.
     record_file=(r"C:\Users\will\Desktop\Python 101\final\record_file.txt")
-
     jackpot=random.randint(1000,1000000)
-    ##This function will simply try to load the current record to infor the user before the game is played
-    record=record_check(record_file)
-    print(record)
+
     ##establish conditional variable
     play_again="yes"
+
+    ##This function will simply display the current record on file
+    #If no file is available the record will be locally set to 10 and the user can work to beat the score locally
+    record=record_check(record_file)
+    
+
     ##Game rules and intro
     print("👨 Welcome! I am Wendel Mandel.")
     print("Today you will be playing.....")
     print("📦📦📦📦📦📦📦📦📦📦📦📦📦📦📦📦")
     print("📦📦📦 WHAT'S IN THE BOX? 📦📦📦")
     print("📦📦📦📦📦📦📦📦📦📦📦📦📦📦📦📦")
-    print("The rules are: \nGuess a box 1-100\nIf you guess lower than the high score you will win the Jackpot!\nHowever, for every wrong guess you will lose a percentage of the jackpot!\nIf you guess in fewer guesses than the record you will also win a seceret prize!\nGood luck! 👨")
+    print("The rules are: \n1)Guess a box 1-100\n2)If you guess lower than the high score you will win the Jackpot!\n3)However, for every wrong guess you will lose a percentage of the jackpot!\n4)If you guess in fewer guesses than the record you will also win a seceret prize!\nGood luck! 👨")
     print(f"Today we have a jackpot of ${jackpot:,}!")
     print(f"Our lowest guess on record is {record}")
     print("*"*15)
     print("Let's get started")
     print("*"*15)
 
+
     ##Test conditional variable in while loop
     while play_again != "no":
         ##Run main game function
         score=play_game()
         
-        #score check function will compare the useres guessing score to record file and replace if lower
-        #error handler will divert to in program score with starting value of 10
+        #score check function will compare the users score to the record and update the file as needed
+        #error handler will divert to the local high score of 10 if file is not found
         record=score_check(record_file,score)
 
         ##recheck conditional for loop
         play_again=input("You can either collect your winnings or play again for another chance to beat the record.\nWould you like to play agin? yes or no: ")
-    ##additional function to find winning guess prize amount  
+
+
+    # Exit the loop 
     print("*"*15)
+    ##additional function to find winning guess prize amount 
     winnings=calc_winnings(jackpot, score, record)
     print(f"Your winnings are ${winnings:,.2f}. Congratulations! ")
     print("*"*15)
@@ -132,7 +143,7 @@ def record_check(record_file):
         file=open(record_file, "r")
         record=file.readline(-1)
     except FileNotFoundError:
-        record = 5
+        record = 10
         
     return record
 
