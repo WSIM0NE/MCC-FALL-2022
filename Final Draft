@@ -6,6 +6,7 @@ import math
 def main ():
     #Create constants and failsafe record variable.
     record_file=(r"C:\Users\will\Desktop\Python 101\final\record_file.txt")
+
     jackpot=random.randint(1000,1000000)
     ##This function will simply try to load the current record to infor the user before the game is played
     record=record_check(record_file)
@@ -18,7 +19,7 @@ def main ():
     print("📦📦📦📦📦📦📦📦📦📦📦📦📦📦📦📦")
     print("📦📦📦 WHAT'S IN THE BOX? 📦📦📦")
     print("📦📦📦📦📦📦📦📦📦📦📦📦📦📦📦📦")
-    print("The rules are: \nGuess a box 1-100\nIf you huess lower than the high score you will win the Jackpot!\nHowever, for every wrong guess you will lose a percentage of the jackpot!\nIf you guess in fewer guesses than the record you will also win a seceret prize!\nGood luck! 👨")
+    print("The rules are: \nGuess a box 1-100\nIf you guess lower than the high score you will win the Jackpot!\nHowever, for every wrong guess you will lose a percentage of the jackpot!\nIf you guess in fewer guesses than the record you will also win a seceret prize!\nGood luck! 👨")
     print(f"Today we have a jackpot of ${jackpot:,}!")
     print(f"Our lowest guess on record is {record}")
     print("*"*15)
@@ -30,10 +31,11 @@ def main ():
         ##Run main game function
         score=play_game()
         
-        
         #score check function will compare the useres guessing score to record file and replace if lower
         #error handler will divert to in program score with starting value of 10
         record=score_check(record_file,score)
+
+        ##recheck conditional for loop
         play_again=input("You can either collect your winnings or play again for another chance to beat the record.\nWould you like to play agin? yes or no: ")
     ##additional function to find winning guess prize amount  
     print("*"*15)
