@@ -21,16 +21,17 @@ def main ():
     
 
     ##Game rules and intro
+    print()
     print("👨 Welcome! I am Wendel Mandel.")
     print("Today you will be playing.....")
     print("📦📦📦📦📦📦📦📦📦📦📦📦📦📦📦📦")
     print("📦📦📦 WHAT'S IN THE BOX? 📦📦📦")
-    print("📦📦📦📦📦📦📦📦📦📦📦📦📦📦📦📦")
-    print("The rules are: \n1)Guess a box 1-100\n2)If you guess lower than the high score you will win the Jackpot!\n3)However, for every wrong guess you will lose a percentage of the jackpot!\n4)If you guess in fewer guesses than the record you will also win a seceret prize!\nGood luck! 👨")
-    print(f"Today we have a jackpot of ${jackpot:,}!")
-    print(f"Our lowest guess on record is {record}")
+    print("📦📦📦📦📦📦📦📦📦📦📦📦📦📦📦📦\n")
+    print("The rules are: \n1)Guess a box 1-100 \n2)If you find the 'jackpot' box you will win a cash prize!\n3)For every wrong guess you will lose a percentage of the jackpot!\n3)However, if you guess in fewer guesses than the record you will win the entire jackpot and also win a seceret prize!\n")
     print("*"*15)
-    print("Let's get started")
+    print(f"Today we have a jackpot of ${jackpot:,}")
+    print(f"Our lowest guess on record is {record}")
+    print("Let's get started - Good Luck! 👨")
     print("*"*15)
 
 
@@ -41,7 +42,7 @@ def main ():
         
         #score check function will compare the users score to the record and update the file as needed
         #error handler will divert to the local high score of 10 if file is not found
-        record=score_check(record_file,score)
+        record=score_check(record, record_file, score)
 
         ##recheck conditional for loop
         play_again=input("You can either collect your winnings or play again for another chance to beat the record.\nWould you like to play agin? yes or no: ")
@@ -58,14 +59,21 @@ def main ():
 
 
 def play_game():
+        ##Set local variables for the game function
         number = random.randint(1,101)
+        #initialize an empty list
         guess_list=[]
+        ##initialize a high guess
         guess=1000
         contents=("🍇","🍉","🍌","🍍","🦞","🍄","🥓","🐙","🐈","🦷","💩","🤡","🍀","🦨","🍺","🕷️ ")
+
+        ##set conditional for guessing number
         while guess != number:
             random_contents=random.choice(contents)
             guess = int(input("Choose a box to open: "))
             guess_list.append(guess)
+
+            ##Give user feedback
             if guess < number:
                 print("*"*15)
                 print(f"Unfortunatly that box contained a {random_contents} and your guess was TOO LOW. Guess again!")
@@ -75,7 +83,8 @@ def play_game():
                         print(f"{i}")
                     else:
                         print(f"{i}", end=", ")
-            ##
+
+            ##Give user feedback
             if guess > number:
                 print("*"*15)
                 print(f"Unfortunatly that box contained {random_contents} and your guess was TOO HIGH Guess again!")
@@ -84,23 +93,40 @@ def play_game():
                     if i == guess_list[-1]:
                         print(f"{i}")
                     else:
-                        print(f"{i}", end=", ")      
+                        print(f"{i}", end=", ")   
+
+        ##Exit guessing loop when correct guess is made by user 
+        ##Give user feedback                
         print()
         print("💲"*15)
         print(f"💰💰💰💰💵 Jackpot 💵💰💰💰💰💰")
         print("💲"*15)
         print()
         print(f"YES! Box # {guess} is correct!")
-        print(f"It took you {len(guess_list)} tries to guess right.") ####compare to score
+        print(f"It took you {len(guess_list)} tries to guess right.")
         print("Your guesses were: ")
         for i in guess_list:
                 if i == guess_list[-1]:
                     print(f"{i} \n")
                 else:
                     print(f"{i}", end=", ")
+        ##function returns number of tries to the score variable
         return len(guess_list)  
 
-def score_check(record_file,score):
+#This function is to assign a local variable to record if no file exists, it also allows me to display the record in my instructions
+def record_check(record_file):
+    try:
+        file=open(record_file, "r")
+        record=file.readline(-1)
+    except FileNotFoundError:
+        record = 10
+        
+    return record
+
+#Function accepts user score after correct guess was made as a variable
+#then checks it against file score if available
+#if not it defaults to the previously refrenced local record variable
+def score_check(record, record_file,score):
     try:
         file=open(record_file, "r")
         record=file.readline(-1)
@@ -138,17 +164,10 @@ def score_check(record_file,score):
             print("You didnt beat the high score")
     return record
 
-def record_check(record_file):
-    try:
-        file=open(record_file, "r")
-        record=file.readline(-1)
-    except FileNotFoundError:
-        record = 10
-        
-    return record
 
+###Calculate some extra numbers for better playability
 def calc_winnings(jackpot, guesses, record):
-    if guesses < int(record):
+    if guesses <= int(record):
         winnings=jackpot
     else:
         winnings=math.ceil(jackpot/guesses)
