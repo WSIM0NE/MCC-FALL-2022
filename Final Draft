@@ -1,0 +1,143 @@
+#######FINAL DRAFT
+
+import random
+import math
+
+def main ():
+    #Create constants and failsafe record variable.
+    record_file=(r"C:\Users\will\Desktop\Python 101\final\record_file.txt")
+    jackpot=random.randint(1000,1000000)
+    ##This function will simply try to load the current record to infor the user before the game is played
+    record=record_check(record_file)
+    ##establish conditional variable
+    play_again="yes"
+    ##Game rules and intro
+    print("👨 Welcome! I am Wendel Mandel.")
+    print("Today you will be playing.....")
+    print("📦📦📦📦📦📦📦📦📦📦📦📦📦📦📦📦")
+    print("📦📦📦 WHAT'S IN THE BOX? 📦📦📦")
+    print("📦📦📦📦📦📦📦📦📦📦📦📦📦📦📦📦")
+    print("The rules are: \nGuess a box 1-100\nIf you guess correctly you will win a portion of the jackpot\nHowever, for every wrong guess you will lose a percentage of the jackpot!\nIf you guess in fewer guesses than the record you will win a seceret prize!\nGood luck! 👨")
+    print(f"Today we have a jackpot of ${jackpot:,}!")
+    print(f"Our lowest guess on record is {record}")
+    print("*"*15)
+    print("Let's get started")
+    print("*"*15)
+
+    ##Test conditional variable in while loop
+    while play_again != "no":
+        ##Run main game function
+        score=play_game()
+        ##additional function to find winning guess prize amount
+        winnings=calc_winnings(jackpot, score)
+        print(f"Congratulations. Your winnings are ${winnings:,.2f}")
+        #score check function will compare the useres guessing score to record file and replace if lower
+        #error handler will divert to in program score with starting value of 10
+    
+        record=score_check(record_file,score)
+        play_again=input("You can either collect your winnings or play again for another chance to beat the record.\nWould you like to play agin? yes or no: ")
+    print("Thank you for playing!")
+    
+
+
+def play_game():
+        number = random.randint(1,10)
+        guess_list=[]
+        guess=1000
+        contents=("🍇","🍉","🍌","🍍","🦞","🍄","🥓","🐙","🐈","🦷","💩","🤡","🍀","🦨","🍺","🕷️")
+        while guess != number:
+            random_contents=random.choice(contents)
+            guess = int(input("Choose a box to open: "))
+            guess_list.append(guess)
+            if guess < number:
+                print("*"*15)
+                print(f"Unfortunatly that box contained a {random_contents} and your guess was too low. Guess again!")
+                print("You have already opend boxe(s): ",end = "")
+                for i in guess_list:
+                    if i == guess_list[-1]:
+                        print(f"{i}")
+                    else:
+                        print(f"{i}", end=", ")
+            ##
+            if guess > number:
+                print("*"*15)
+                print(f"Unfortunatly that box contained {random_contents} and your guess was too high Guess again!")
+                print("You have already opend boxes: ",end = "")
+                for i in guess_list:
+                    if i == guess_list[-1]:
+                        print(f"{i}")
+                    else:
+                        print(f"{i}", end=", ")      
+        print()
+        print("💲"*15)
+        print(f"💰💰💰💰💵 Jackpot 💵💰💰💰💰💰")
+        print("💲"*15)
+        print()
+        print(f"YES! Box # {guess} is correct!")
+        print(f"It took you {len(guess_list)} tries to guess right.") ####compare to score
+        print("Your guesses were: ")
+        for i in guess_list:
+                if i == guess_list[-1]:
+                    print(f"{i} \n")
+                else:
+                    print(f"{i}", end=", ")
+        return len(guess_list)  
+
+def score_check(record_file,score):
+    try:
+        file=open(record_file, "r")
+        record=file.readline(0)
+        if score < int(record):
+            print("*"*15)
+            print("You guessed lower than the record congratulations!")
+            print("In addition to the full prize money you also recieve the secret prize.")
+            print(".............")
+            print("Its an ice cream cone! 🍦")
+            print("*"*15)
+            file.close()
+            file=open(record_file, "w")
+            file.write(int(score))
+            file.close()
+        elif score > int(record):
+            print("*"*15)
+            print("You didnt beat the high score")
+            print("It dissapoints me you gave up so easily.")
+            print("Better luck next time.")
+            print("Enjoy the hollow victory of your prize money.")
+            print("*"*15)
+        else:
+            print("You tied the record great job!")
+
+    except FileNotFoundError:
+        
+        if score < record:
+            print("*"*15)
+            print("You guessed lower than the record congratulations!")
+            print("In addition to the full prize money you also recieve the secret prize.")
+            print(".............")
+            print("Its an ice cream cone! 🍦")
+            print("*"*15)
+            record=score
+        elif score > record:
+            print("*"*15)
+            print("You didnt beat the high score")
+            print("It dissapoints me you gave up so easily.")
+            print("Better luck next time.")
+            print("Enjoy the hollow victory of your prize money.")
+            print("*"*15)
+    return record
+
+def record_check(record_file):
+    try:
+        file=open(record_file, "r")
+        record=file.readline(0)
+    except FileNotFoundError:
+        record = 10
+        
+    return record
+
+def calc_winnings(jackpot, gueses):
+    winnings=math.ceil(jackpot/gueses)
+    return winnings
+
+main()
